@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Details | RuralEd</title>
+    <style>
+        :root {
+            --primary-color: #4a6fa5;
+            --secondary-color: #166088;
+            --accent-color: #4fc3a1;
+            --light-color: #f8f9fa;
+            --dark-color: #343a40;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --premium-color: #f9c74f;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark-color);
+            line-height: 1.6;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+        
+        .logo h1 {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 1.5rem;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark-color);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-profile img {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            margin-right: 10px;
+            object-fit: cover;
+        }
+        
+        .user-name {
+            font-weight: 500;
+        }
+        
+        /* Main Content */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+        }
+        
+        /* Course Sidebar */
+        .course-sidebar {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+        
+        .course-image {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+        
+        .course-title {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .course-instructor {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            color: #666;
+        }
+        
+        .course-instructor img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .course-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+        
+        .course-meta-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .course-meta-item i {
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+        
+        .course-meta-item span {
+            font-size: 0.8rem;
+            color: #666;
+        }
+        
+        .course-progress {
+            margin-bottom: 1.5rem;
+        }
+        
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background-color: #eee;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            width: 35%;
+            background-color: var(--accent-color);
+            border-radius: 4px;
+        }
+        
+        .units-container {
+            margin-top: 1.5rem;
+        }
+        
+        .unit {
+            margin-bottom: 1rem;
+        }
+        
+        .unit-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem;
+            background-color: #f8f9fa;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .unit-header:hover {
+            background-color: #e9ecef;
+        }
+        
+        .unit-header.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .unit-title {
+            font-weight: 500;
+        }
+        
+        .unit-content {
+            padding: 0.8rem;
+            background-color: white;
+            border-radius: 0 0 6px 6px;
+            display: none;
+        }
+        
+        .unit-content.active {
+            display: block;
+        }
+        
+        .lesson {
+            display: flex;
+            align-items: center;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+        }
+        
+        .lesson:last-child {
+            border-bottom: none;
+        }
+        
+        .lesson-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 10px;
+            font-size: 0.7rem;
+            color: #666;
+        }
+        
+        .lesson.completed .lesson-icon {
+            background-color: var(--success-color);
+            color: white;
+        }
+        
+        .lesson.current .lesson-icon {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .lesson-title {
+            flex: 1;
+            font-size: 0.9rem;
+        }
+        
+        .lesson-duration {
+            font-size: 0.8rem;
+            color: #999;
+        }
+        
+        /* Course Content */
+        .course-content-area {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+        }
+        
+        .content-header {
+            margin-bottom: 2rem;
+        }
+        
+        .content-title {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .content-description {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+        
+        .content-actions {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 5px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .btn i {
+            margin-right: 8px;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        .btn-outline:hover {
+            background-color: rgba(74, 111, 165, 0.1);
+        }
+        
+        /* Video Player */
+        .video-container {
+            width: 100%;
+            background-color: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+        
+        .video-container video {
+            width: 100%;
+            display: block;
+        }
+        
+        .video-placeholder {
+            width: 100%;
+            height: 400px;
+            background-color: #222;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+        
+        .video-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+        }
+        
+        .video-info h3 {
+            margin-bottom: 0.5rem;
+        }
+        
+        .video-info p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        /* Resources Section */
+        .resources-section {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #eee;
+        }
+        
+        .section-title {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title i {
+            margin-right: 10px;
+            color: var(--primary-color);
+        }
+        
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        
+        .resource-card {
+            border: 1px solid #eee;
+            border-radius: 6px;
+            padding: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .resource-card:hover {
+            border-color: var(--primary-color);
+        }
+        
+        .resource-icon {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .resource-title {
+            font-weight: 500;
+            margin-bottom: 0.3rem;
+        }
+        
+        .resource-type {
+            font-size: 0.8rem;
+            color: #999;
+        }
+        
+        /* Quiz Section */
+        .quiz-section {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #eee;
+        }
+        
+        .quiz-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .quiz-meta {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .quiz-meta-item {
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .quiz-meta-item i {
+            margin-right: 5px;
+        }
+        
+        .quiz-questions {
+            margin-top: 1.5rem;
+        }
+        
+        .question {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .question:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .question-text {
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+        
+        .options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.8rem;
+        }
+        
+        .option {
+            display: flex;
+            align-items: center;
+        }
+        
+        .option input {
+            margin-right: 10px;
+        }
+        
+        .option-label {
+            flex: 1;
+        }
+        
+        .submit-quiz {
+            margin-top: 2rem;
+            text-align: center;
+        }
+        
+        /* Navigation */
+        .content-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #eee;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            
+            .course-sidebar {
+                position: static;
+                margin-bottom: 2rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .nav-links {
+                margin-top: 1rem;
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .nav-links li {
+                margin-left: 0;
+            }
+            
+            .user-profile {
+                margin-top: 1rem;
+                width: 100%;
+                justify-content: flex-end;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+            
+            .content-actions {
+                flex-direction: column;
+            }
+            
+            .quiz-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M30,10 L70,10 L90,50 L70,90 L30,90 L10,50 Z' fill='%234a6fa5'/><text x='50' y='60' font-family='Arial' font-size='30' fill='white' text-anchor='middle' dominant-baseline='middle'>R</text></svg>" alt="RuralEd Logo">
+                <h1>RuralEd</h1>
+            </div>
+            
+            <ul class="nav-links">
+                <li><a href="#"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="#"><i class="fas fa-book-open"></i> My Courses</a></li>
+                <li><a href="#"><i class="fas fa-chart-line"></i> Progress</a></li>
+                <li><a href="#"><i class="fas fa-graduation-cap"></i> Certificates</a></li>
+                <li><a href="#"><i class="fas fa-question-circle"></i> Help</a></li>
+            </ul>
+            
+            <div class="user-profile">
+                <img src="https://ui-avatars.com/api/?name=John+Doe&background=4a6fa5&color=fff" alt="User Profile">
+                <span class="user-name">John Doe</span>
+            </div>
+        </nav>
+    </header>
+    
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Course Sidebar -->
+        <div class="course-sidebar">
+            <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Python Course" class="course-image">
+            <h2 class="course-title">Introduction to Python</h2>
+            <div class="course-instructor">
+                <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Instructor">
+                <span>Dr. Sarah Johnson</span>
+            </div>
+            
+            <div class="course-meta">
+                <div class="course-meta-item">
+                    <i class="far fa-clock"></i>
+                    <span>12 hours</span>
+                </div>
+                <div class="course-meta-item">
+                    <i class="fas fa-signal"></i>
+                    <span>Beginner</span>
+                </div>
+                <div class="course-meta-item">
+                    <i class="far fa-file-alt"></i>
+                    <span>5 Units</span>
+                </div>
+            </div>
+            
+            <div class="course-progress">
+                <div class="progress-label">
+                    <span>Course Progress</span>
+                    <span>35%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 35%;"></div>
+                </div>
+            </div>
+            
+            <div class="units-container">
+                <!-- Unit 1 -->
+                <div class="unit">
+                    <div class="unit-header active" onclick="toggleUnit(this)">
+                        <span class="unit-title">Unit 1: Python Basics</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="unit-content active">
+                        <div class="lesson current" onclick="loadLesson(1)">
+                            <div class="lesson-icon"><i class="fas fa-play"></i></div>
+                            <span class="lesson-title">Introduction to Python</span>
+                            <span class="lesson-duration">15:30</span>
+                        </div>
+                        <div class="lesson" onclick="loadLesson(2)">
+                            <div class="lesson-icon">2</div>
+                            <span class="lesson-title">Variables and Data Types</span>
+                            <span class="lesson-duration">22:15</span>
+                        </div>
+                        <div class="lesson" onclick="loadLesson(3)">
+                            <div class="lesson-icon">3</div>
+                            <span class="lesson-title">Basic Operators</span>
+                            <span class="lesson-duration">18:40</span>
+                        </div>
+                        <div class="lesson" onclick="loadQuiz(1)">
+                            <div class="lesson-icon"><i class="fas fa-question"></i></div>
+                            <span class="lesson-title">Unit 1 Quiz</span>
+                            <span class="lesson-duration">10 min</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Unit 2 -->
+                <div class="unit">
+                    <div class="unit-header" onclick="toggleUnit(this)">
+                        <span class="unit-title">Unit 2: Control Flow</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="unit-content">
+                        <div class="lesson" onclick="loadLesson(4)">
+                            <div class="lesson-icon">1</div>
+                            <span class="lesson-title">Conditional Statements</span>
+                            <span class="lesson-duration">25:10</span>
+                        </div>
+                        <div class="lesson" onclick="loadLesson(5)">
+                            <div class="lesson-icon">2</div>
+                            <span class="lesson-title">Loops</span>
+                            <span class="lesson-duration">30:45</span>
+                        </div>
+                        <div class="lesson" onclick="loadQuiz(2)">
+                            <div class="lesson-icon"><i class="fas fa-question"></i></div>
+                            <span class="lesson-title">Unit 2 Quiz</span>
+                            <span class="lesson-duration">15 min</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Unit 3 -->
+                <div class="unit">
+                    <div class="unit-header" onclick="toggleUnit(this)">
+                        <span class="unit-title">Unit 3: Functions</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="unit-content">
+                        <div class="lesson" onclick="loadLesson(6)">
+                            <div class="lesson-icon">1</div>
+                            <span class="lesson-title">Defining Functions</span>
+                            <span class="lesson-duration">20:30</span>
+                        </div>
+                        <div class="lesson" onclick="loadLesson(7)">
+                            <div class="lesson-icon">2</div>
+                            <span class="lesson-title">Function Arguments</span>
+                            <span class="lesson-duration">28:15</span>
+                        </div>
+                        <div class="lesson" onclick="loadQuiz(3)">
+                            <div class="lesson-icon"><i class="fas fa-question"></i></div>
+                            <span class="lesson-title">Unit 3 Quiz</span>
+                            <span class="lesson-duration">12 min</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Course Content Area -->
+        <div class="course-content-area">
+            <div class="content-header">
+                <h2 class="content-title">Introduction to Python</h2>
+                <p class="content-description">Learn the basic syntax and concepts of Python programming language.</p>
+                
+                <div class="content-actions">
+                    <button class="btn btn-primary">
+                        <i class="fas fa-bookmark"></i> Save Progress
+                    </button>
+                    <button class="btn btn-outline">
+                        <i class="fas fa-download"></i> Download Materials
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Video Player -->
+            <div class="video-container">
+            <a href="https://youtu.be/vLqTf2b6GZw?si=AXedgFdemsOydAa2" style="text-decoration: none;">
+                <div class="video-placeholder">
+                    <div>
+                        <i class="fas fa-play-circle" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                        <p>Video Lecture: Introduction to Python</p>
+                    </div>
+                </div>
+            </a>
+            </div>
+            
+            <div class="video-controls">
+                <div class="video-info">
+                    <h3>Introduction to Python</h3>
+                    <p>Learn what Python is, its applications, and why it's a great first programming language.</p>
+                </div>
+                <button class="btn btn-primary">
+                    <i class="fas fa-check"></i> Mark as Complete
+                </button>
+            </div>
+            
+            <!-- Resources Section -->
+            <div class="resources-section">
+                <h3 class="section-title">
+                    <i class="fas fa-file-alt"></i> Resources
+                </h3>
+                
+                <div class="resources-grid">
+                    <div class="resource-card">
+                        <div class="resource-icon">
+                            <i class="fas fa-file-pdf"></i>
+                        </div>
+                        <h4 class="resource-title">Python Cheat Sheet</h4>
+                        <p class="resource-type">PDF Document</p>
+                    </div>
+                    
+                    <div class="resource-card">
+                        <div class="resource-icon">
+                            <i class="fas fa-file-code"></i>
+                        </div>
+                        <h4 class="resource-title">Exercise Files</h4>
+                        <p class="resource-type">ZIP Archive</p>
+                    </div>
+                    
+                    <div class="resource-card">
+                        <div class="resource-icon">
+                            <i class="fas fa-link"></i>
+                        </div>
+                        <h4 class="resource-title">Official Documentation</h4>
+                        <p class="resource-type">External Link</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quiz Section (Hidden by default) -->
+            <div class="quiz-section" id="quizSection" style="display: none;">
+                <div class="quiz-info">
+                    <h3 class="section-title">
+                        <i class="fas fa-question-circle"></i> Unit 1 Quiz
+                    </h3>
+                    
+                    <div class="quiz-meta">
+                        <div class="quiz-meta-item">
+                            <i class="far fa-clock"></i>
+                            <span>10 minutes</span>
+                        </div>
+                        <div class="quiz-meta-item">
+                            <i class="far fa-question-circle"></i>
+                            <span>5 questions</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="quiz-questions">
+                    <div class="question">
+                        <p class="question-text">1. What is the correct way to print "Hello, World!" in Python?</p>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" id="q1a1" name="q1">
+                                <label class="option-label" for="q1a1">print("Hello, World!")</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="q1a2" name="q1">
+                                <label class="option-label" for="q1a2">echo "Hello, World!"</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="q1a3" name="q1">
+                                <label class="option-label" for="q1a3">console.log("Hello, World!")</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="q1a4" name="q1">
+                                <label class="option-label" for="q1a4">printf("Hello, World!")</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="question">
+                        <p class="question-text">2. Which of these is NOT a valid Python data type?</p>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" id="q2a1" name="q2">
+                                <label class="option-label" for="q2a1">int</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="q2a2" name="q2">
+                                <label class="option-label" for="q2a2">float</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="q2a3" name="q2">
+                                <label class="option-label" for="q2a3">string</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="q2a4" name="q2">
+                                <label class="option-label" for="q2a4">char</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="submit-quiz">
+                    <button class="btn btn-primary">
+                        <i class="fas fa-paper-plane"></i> Submit Quiz
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Navigation -->
+            <div class="content-navigation">
+                <button class="btn btn-outline" disabled>
+                    <i class="fas fa-arrow-left"></i> Previous
+                </button>
+                <button class="btn btn-primary" id="nextButton">
+                    Next <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Toggle unit content
+        function toggleUnit(header) {
+            const unit = header.parentElement;
+            const content = unit.querySelector('.unit-content');
+            const icon = header.querySelector('i');
+            
+            // Toggle active class
+            header.classList.toggle('active');
+            content.classList.toggle('active');
+            
+            // Change icon
+            if (header.classList.contains('active')) {
+                icon.classList.remove('fa-chevron-down');
+                icon.classList.add('fa-chevron-up');
+            } else {
+                icon.classList.remove('fa-chevron-up');
+                icon.classList.add('fa-chevron-down');
+            }
+        }
+        
+        // Load lesson content
+        function loadLesson(lessonId) {
+            // Update current lesson indicator
+            const lessons = document.querySelectorAll('.lesson');
+            lessons.forEach(lesson => {
+                lesson.classList.remove('current');
+                lesson.querySelector('.lesson-icon').innerHTML = lesson.querySelector('.lesson-icon').textContent.includes('fa') ? 
+                    '<i class="fas fa-play"></i>' : lesson.querySelector('.lesson-icon').textContent;
+            });
+            
+            // Set current lesson
+            event.currentTarget.classList.add('current');
+            event.currentTarget.querySelector('.lesson-icon').innerHTML = '<i class="fas fa-play"></i>';
+            
+            // In a real app, you would load the lesson content via AJAX
+            console.log(`Loading lesson ${lessonId}`);
+            
+            // Update video placeholder
+            const videoPlaceholder = document.querySelector('.video-placeholder');
+            videoPlaceholder.innerHTML = `
+                <div>
+                    <i class="fas fa-play-circle" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                    <p>Video Lecture: ${event.currentTarget.querySelector('.lesson-title').textContent}</p>
+                </div>
+            `;
+            
+            // Update content title and description
+            document.querySelector('.content-title').textContent = event.currentTarget.querySelector('.lesson-title').textContent;
+            document.querySelector('.content-description').textContent = `Video lecture for ${event.currentTarget.querySelector('.lesson-title').textContent}`;
+            
+            // Hide quiz section if it's visible
+            document.getElementById('quizSection').style.display = 'none';
+            
+            // Update next button
+            document.getElementById('nextButton').innerHTML = `Next <i class="fas fa-arrow-right"></i>`;
+        }
+        
+        // Load quiz
+        function loadQuiz(quizId) {
+            // Update current lesson indicator
+            const lessons = document.querySelectorAll('.lesson');
+            lessons.forEach(lesson => {
+                lesson.classList.remove('current');
+                lesson.querySelector('.lesson-icon').innerHTML = lesson.querySelector('.lesson-icon').textContent.includes('fa') ? 
+                    '<i class="fas fa-question"></i>' : lesson.querySelector('.lesson-icon').textContent;
+            });
+            
+            // Set current lesson
+            event.currentTarget.classList.add('current');
+            event.currentTarget.querySelector('.lesson-icon').innerHTML = '<i class="fas fa-question"></i>';
+            
+            // Show quiz section
+            document.getElementById('quizSection').style.display = 'block';
+            
+            // Update content title and description
+            document.querySelector('.content-title').textContent = event.currentTarget.querySelector('.lesson-title').textContent;
+            document.querySelector('.content-description').textContent = `Test your knowledge from this unit`;
+            
+            // Hide video placeholder
+            const videoPlaceholder = document.querySelector('.video-placeholder');
+            videoPlaceholder.style.display = 'none';
+            
+            // Update next button
+            document.getElementById('nextButton').innerHTML = `Skip Quiz <i class="fas fa-arrow-right"></i>`;
+            
+            // In a real app, you would load the quiz questions via AJAX
+            console.log(`Loading quiz ${quizId}`);
+        }
+        
+        // Next button click handler
+        document.getElementById('nextButton').addEventListener('click', function() {
+            // Find current lesson
+            const currentLesson = document.querySelector('.lesson.current');
+            if (!currentLesson) return;
+            
+            // Find next lesson
+            const nextLesson = currentLesson.nextElementSibling;
+            if (nextLesson) {
+                nextLesson.click();
+            } else {
+                // Move to next unit
+                const currentUnit = currentLesson.closest('.unit');
+                const nextUnit = currentUnit.nextElementSibling;
+                if (nextUnit) {
+                    nextUnit.querySelector('.unit-header').click();
+                    nextUnit.querySelector('.lesson').click();
+                } else {
+                    alert('Congratulations! You have completed this unit.');
+                }
+            }
+        });
+        
+        // Mark as complete button
+        document.querySelector('.video-controls .btn-primary').addEventListener('click', function() {
+            const currentLesson = document.querySelector('.lesson.current');
+            if (currentLesson) {
+                currentLesson.classList.add('completed');
+                currentLesson.querySelector('.lesson-icon').innerHTML = '<i class="fas fa-check"></i>';
+                alert('Lesson marked as complete!');
+                
+                // Update progress
+                const progressFill = document.querySelector('.progress-fill');
+                const currentWidth = parseFloat(progressFill.style.width);
+                progressFill.style.width = `${Math.min(currentWidth + 5, 100)}%`;
+                document.querySelector('.progress-label span:last-child').textContent = `${Math.floor(Math.min(currentWidth + 5, 100))}%`;
+            }
+        });
+        
+        // Submit quiz button
+        document.querySelector('.submit-quiz .btn-primary').addEventListener('click', function() {
+            // Validate that all questions are answered
+            const unanswered = document.querySelectorAll('.question:not(:has(input:checked))');
+            if (unanswered.length > 0) {
+                alert(`Please answer all questions. ${unanswered.length} remaining.`);
+                return;
+            }
+            
+            // In a real app, you would submit the quiz to the server
+            alert('Quiz submitted successfully!');
+            
+            // Mark quiz as completed
+            const quizLesson = document.querySelector('.lesson.current');
+            if (quizLesson) {
+                quizLesson.classList.add('completed');
+                quizLesson.querySelector('.lesson-icon').innerHTML = '<i class="fas fa-check"></i>';
+                
+                // Update progress
+                const progressFill = document.querySelector('.progress-fill');
+                const currentWidth = parseFloat(progressFill.style.width);
+                progressFill.style.width = `${Math.min(currentWidth + 10, 100)}%`;
+                document.querySelector('.progress-label span:last-child').textContent = `${Math.floor(Math.min(currentWidth + 10, 100))}%`;
+            }
+            
+            // Automatically go to next lesson
+            document.getElementById('nextButton').click();
+        });
+        
+        // Initialize first lesson
+        document.querySelector('.lesson.current').click();
+    </script>
+</body>
+</html>

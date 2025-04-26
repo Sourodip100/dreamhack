@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RuralEd - Course Dashboard</title>
+    <style>
+        :root {
+            --primary-color: #4a6fa5;
+            --secondary-color: #166088;
+            --accent-color: #4fc3a1;
+            --light-color: #f8f9fa;
+            --dark-color: #343a40;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --premium-color: #f9c74f;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark-color);
+            line-height: 1.6;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+        
+        .logo h1 {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 1.5rem;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark-color);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-profile img {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            margin-right: 10px;
+            object-fit: cover;
+        }
+        
+        .user-name {
+            font-weight: 500;
+        }
+        
+        /* Main Content */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .welcome-banner {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .welcome-banner::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 15s infinite alternate;
+        }
+        
+        .welcome-banner h2 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            position: relative;
+        }
+        
+        .welcome-banner p {
+            max-width: 600px;
+            position: relative;
+        }
+        
+        .progress-container {
+            display: flex;
+            align-items: center;
+            margin-top: 1rem;
+            position: relative;
+        }
+        
+        .progress-label {
+            margin-right: 1rem;
+            font-weight: 500;
+        }
+        
+        .progress-bar {
+            flex: 1;
+            height: 10px;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            width: 65%;
+            background-color: var(--accent-color);
+            border-radius: 5px;
+            transition: width 0.5s ease;
+        }
+        
+        .progress-percent {
+            margin-left: 1rem;
+            font-weight: 600;
+        }
+        
+        /* Course Categories */
+        .categories {
+            display: flex;
+            overflow-x: auto;
+            padding: 1rem 0;
+            margin-bottom: 2rem;
+            scrollbar-width: thin;
+        }
+        
+        .category {
+            padding: 0.5rem 1.5rem;
+            margin-right: 0.5rem;
+            background-color: white;
+            border-radius: 20px;
+            cursor: pointer;
+            white-space: nowrap;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+            border: 1px solid #eee;
+        }
+        
+        .category:hover, .category.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        /* Course Grid */
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title i {
+            margin-right: 10px;
+            color: var(--primary-color);
+        }
+        
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .course-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+        }
+        
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .course-image {
+            height: 160px;
+            width: 100%;
+            object-fit: cover;
+        }
+        
+        .course-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: var(--premium-color);
+            color: var(--dark-color);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .course-content {
+            padding: 1.5rem;
+        }
+        
+        .course-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .course-instructor {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .course-instructor img {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .course-description {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 1rem;
+            display: -webkit-box;
+            /* -webkit-line-clamp: 2; */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .course-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+        }
+        
+        .course-duration, .course-level {
+            display: flex;
+            align-items: center;
+            font-size: 0.8rem;
+            color: #666;
+        }
+        
+        .course-duration i, .course-level i {
+            margin-right: 5px;
+        }
+        
+        .course-price {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        
+        .course-price.free {
+            color: var(--success-color);
+        }
+        
+        .course-price.premium {
+            color: var(--premium-color);
+        }
+        
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 5px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .btn i {
+            margin-right: 8px;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        .btn-outline:hover {
+            background-color: rgba(74, 111, 165, 0.1);
+        }
+        
+        .btn-success {
+            background-color: var(--success-color);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background-color: #218838;
+        }
+        
+        /* Recommended Section */
+        .recommended-courses {
+            margin-bottom: 3rem;
+        }
+        
+        /* All Courses Section */
+        .all-courses {
+            margin-bottom: 3rem;
+        }
+        
+        /* Emotion Detection Section */
+        .emotion-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .emotion-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .emotion-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .emotion-toggle {
+            display: flex;
+            align-items: center;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+            margin: 0 10px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: var(--accent-color);
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        
+        .emotion-content {
+            display: flex;
+            align-items: center;
+        }
+        
+        .emotion-camera {
+            width: 120px;
+            height: 120px;
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            margin-right: 1.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .emotion-camera video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .emotion-camera-placeholder {
+            text-align: center;
+            color: #999;
+        }
+        
+        .emotion-camera-placeholder i {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .emotion-result {
+            flex: 1;
+        }
+        
+        .emotion-status {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+        
+        .emotion-value {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        
+        .emotion-suggestion {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .courses-grid {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .nav-links {
+                margin-top: 1rem;
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .nav-links li {
+                margin-left: 0;
+            }
+            
+            .user-profile {
+                margin-top: 1rem;
+                width: 100%;
+                justify-content: flex-end;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+            
+            .emotion-content {
+                flex-direction: column;
+            }
+            
+            .emotion-camera {
+                margin-right: 0;
+                margin-bottom: 1rem;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .courses-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .welcome-banner h2 {
+                font-size: 1.5rem;
+            }
+        }
+        
+        /* Animations */
+        @keyframes pulse {
+            0% { transform: translate(0, 0); }
+            50% { transform: translate(10%, 10%); }
+            100% { transform: translate(-10%, -10%); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        /* Simple mode styles */
+        body.simple-mode {
+            background: white;
+        }
+        
+        body.simple-mode header {
+            box-shadow: none;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        body.simple-mode .course-card {
+            box-shadow: none;
+            border: 1px solid #ddd;
+        }
+        
+        body.simple-mode .course-card:hover {
+            transform: none;
+            box-shadow: none;
+        }
+        
+        body.simple-mode .welcome-banner {
+            background: var(--primary-color);
+        }
+        
+        body.simple-mode .categories {
+            flex-wrap: wrap;
+            overflow-x: visible;
+        }
+        
+        body.simple-mode .category {
+            margin-bottom: 0.5rem;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M30,10 L70,10 L90,50 L70,90 L30,90 L10,50 Z' fill='%234a6fa5'/><text x='50' y='60' font-family='Arial' font-size='30' fill='white' text-anchor='middle' dominant-baseline='middle'>R</text></svg>" alt="RuralEd Logo">
+                <h1>RuralEd</h1>
+            </div>
+            
+            <ul class="nav-links">
+                <li><a href="#"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="#"><i class="fas fa-book-open"></i> My Courses</a></li>
+                <li><a href="#"><i class="fas fa-chart-line"></i> Progress</a></li>
+                <li><a href="#"><i class="fas fa-graduation-cap"></i> Certificates</a></li>
+                <li><a href="#"><i class="fas fa-question-circle"></i> Help</a></li>
+            </ul>
+            
+            <div class="user-profile">
+                <img src="https://ui-avatars.com/api/?name=John+Doe&background=4a6fa5&color=fff" alt="User Profile">
+                <span class="user-name">John Doe</span>
+            </div>
+        </nav>
+    </header>
+    
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Welcome Banner -->
+        <div class="welcome-banner">
+            <h2>Welcome back, John!</h2>
+            <p>Continue your learning journey with personalized recommendations based on your progress and interests.</p>
+            
+            <div class="progress-container">
+                <span class="progress-label">Monthly Goal</span>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 65%;"></div>
+                </div>
+                <span class="progress-percent">65%</span>
+            </div>
+        </div>
+        
+        <!-- Emotion Detection Section -->
+        <div class="emotion-section">
+            <div class="emotion-header">
+                <h3 class="emotion-title"><i class="fas fa-smile"></i> Emotion Detection</h3>
+                <div class="emotion-toggle">
+                    <span>Off</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="emotionToggle">
+                        <span class="slider"></span>
+                    </label>
+                    <span>On</span>
+                </div>
+            </div>
+            
+            <div class="emotion-content">
+                <div class="emotion-camera" id="emotionCamera">
+                    <div class="emotion-camera-placeholder">
+                        <i class="fas fa-camera"></i>
+                        <p>Camera disabled</p>
+                    </div>
+                </div>
+                
+                <div class="emotion-result">
+                    <p class="emotion-status">Current emotion: <span class="emotion-value" id="emotionValue">Not detected</span></p>
+                    <p>Our adaptive learning system can adjust content based on your emotional state to optimize your learning experience.</p>
+                    
+                    <div class="emotion-suggestion" id="emotionSuggestion">
+                        Enable emotion detection to get personalized suggestions based on your mood and engagement level.
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Course Categories -->
+        <div class="categories">
+            <div class="category active">All Courses</div>
+            <div class="category">Technology</div>
+            <div class="category">Business</div>
+            <div class="category">Science</div>
+            <div class="category">Mathematics</div>
+            <div class="category">Languages</div>
+            <div class="category">Arts</div>
+            <div class="category">Health</div>
+            <div class="category">Personal Development</div>
+        </div>
+        
+        <!-- Recommended Courses -->
+        <div class="recommended-courses">
+            <h3 class="section-title"><i class="fas fa-star"></i> Recommended For You</h3>
+            
+            <div class="courses-grid">
+                <!-- Course Card 1 -->
+                <div class="course-card">
+                    <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Programming Course" class="course-image">
+                    <div class="course-content">
+                        <h4 class="course-title">Introduction to Python</h4>
+                        <div class="course-instructor">
+                            <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Instructor">
+                            <span>Dr. Sarah Johnson</span>
+                        </div>
+                        <p class="course-description">Learn the fundamentals of Python programming with hands-on exercises and real-world examples.</p>
+                        
+                        <div class="course-meta">
+                            <div class="course-duration">
+                                <i class="far fa-clock"></i> 12 hrs
+                            </div>
+                            <div class="course-level">
+                                <i class="fas fa-signal"></i> Beginner
+                            </div>
+                        </div>
+                        
+                        <div class="course-price free">FREE</div>
+                        <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;" onclick="window.location.href='newinterface.html'">
+                            <i class="fas fa-play"></i>  Continue 
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Course Card 2 -->
+                <div class="course-card">
+                    <div class="course-badge">PREMIUM</div>
+                    <img src="https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Data Science Course" class="course-image">
+                    <div class="course-content">
+                        <h4 class="course-title">Data Science Fundamentals</h4>
+                        <div class="course-instructor">
+                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Instructor">
+                            <span>Prof. Michael Chen</span>
+                        </div>
+                        <p class="course-description">Master the essential tools and techniques for data analysis and visualization.</p>
+                        
+                        <div class="course-meta">
+                            <div class="course-duration">
+                                <i class="far fa-clock"></i> 24 hrs
+                            </div>
+                            <div class="course-level">
+                                <i class="fas fa-signal"></i> Intermediate
+                            </div>
+                        </div>
+                        
+                        <div class="course-price premium">$49.99</div>
+                        
+                        <button class="btn btn-outline" style="width: 100%; margin-top: 1rem;">
+                            <i class="fas fa-shopping-cart"></i> Enroll Now
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Course Card 3 -->
+                <div class="course-card">
+                    <img src="https://images.unsplash.com/photo-1546410531-bb4caa6b424d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Mathematics Course" class="course-image">
+                    <div class="course-content">
+                        <h4 class="course-title">Advanced Calculus</h4>
+                        <div class="course-instructor">
+                            <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Instructor">
+                            <span>Dr. Robert Williams</span>
+                        </div>
+                        <p class="course-description">Dive deep into calculus concepts with practical applications in science and engineering.</p>
+                        
+                        <div class="course-meta">
+                            <div class="course-duration">
+                                <i class="far fa-clock"></i> 18 hrs
+                            </div>
+                            <div class="course-level">
+                                <i class="fas fa-signal"></i> Advanced
+                            </div>
+                        </div>
+                        
+                        <div class="course-price free">FREE</div>
+                        
+                        <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+                            <i class="fas fa-play"></i> Start Learning
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- All Courses -->
+        <div class="all-courses">
+            <h3 class="section-title"><i class="fas fa-th-large"></i> All Courses</h3>
+            
+            <div class="courses-grid">
+                <!-- Course Card 4 -->
+                <div class="course-card">
+                    <img src="https://images.unsplash.com/photo-1542626991-cbc4e32524cc?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Web Development Course" class="course-image">
+                    <div class="course-content">
+                        <h4 class="course-title">Web Development Bootcamp</h4>
+                        <div class="course-instructor">
+                            <img src="https://randomuser.me/api/portraits/women/63.jpg" alt="Instructor">
+                            <span>Angela Yu</span>
+                        </div>
+                        <p class="course-description">Become a full-stack web developer with HTML, CSS, JavaScript, Node, React, MongoDB and more!</p>
+                        
+                        <div class="course-meta">
+                            <div class="course-duration">
+                                <i class="far fa-clock"></i> 45 hrs
+                            </div>
+                            <div class="course-level">
+                                <i class="fas fa-signal"></i> Beginner
+                            </div>
+                        </div>
+                        
+                        <div class="course-price premium">$89.99</div>
+                        
+                        <button class="btn btn-outline" style="width: 100%; margin-top: 1rem;">
+                            <i class="fas fa-shopping-cart"></i> Enroll Now
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Course Card 5 -->
+                <div class="course-card">
+                    <div class="course-badge">PREMIUM</div>
+                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Machine Learning Course" class="course-image">
+                    <div class="course-content">
+                        <h4 class="course-title">Machine Learning A-Z</h4>
+                        <div class="course-instructor">
+                            <img src="https://randomuser.me/api/portraits/men/22.jpg" alt="Instructor">
+                            <span>Dr. Kirill Eremenko</span>
+                        </div>
+                        <p class="course-description">Hands-on Python and R in data science with machine learning algorithms and AI principles.</p>
+                        
+                        <div class="course-meta">
+                            <div class="course-duration">
+                                <i class="far fa-clock"></i> 40 hrs
+                            </div>
+                            <div class="course-level">
+                                <i class="fas fa-signal"></i> Intermediate
+                            </div>
+                        </div>
+                        
+                        <div class="course-price premium">$99.99</div>
+                        
+                        <button class="btn btn-outline" style="width: 100%; margin-top: 1rem;">
+                            <i class="fas fa-shopping-cart"></i> Enroll Now
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Course Card 6 -->
+                <div class="course-card">
+                    <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Business Course" class="course-image">
+                    <div class="course-content">
+                        <h4 class="course-title">Business Fundamentals</h4>
+                        <div class="course-instructor">
+                            <img src="https://randomuser.me/api/portraits/women/28.jpg" alt="Instructor">
+                            <span>Prof. Susan Miller</span>
+                        </div>
+                        <p class="course-description">Learn essential business concepts including marketing, finance, and operations management.</p>
+                        
+                        <div class="course-meta">
+                            <div class="course-duration">
+                                <i class="far fa-clock"></i> 15 hrs
+                            </div>
+                            <div class="course-level">
+                                <i class="fas fa-signal"></i> Beginner
+                            </div>
+                        </div>
+                        
+                        <div class="course-price free">FREE</div>
+                        
+                        <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+                            <i class="fas fa-play"></i> Start Learning
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Course Card 7 -->
+                <div class="course-card">
+                    <img src="https://images.unsplash.com/photo-1541178735493-479c1a27ed24?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Language Course" class="course-image">
+                    <div class="course-content">
+                        <h4 class="course-title">Spanish for Beginners</h4>
+                        <div class="course-instructor">
+                            <img src="https://randomuser.me/api/portraits/men/65.jpg" alt="Instructor">
+                            <span>Juan Martinez</span>
+                        </div>
+                        <p class="course-description">Learn conversational Spanish with our interactive, adaptive language learning system.</p>
+                        
+                        <div class="course-meta">
+                            <div class="course-duration">
+                                <i class="far fa-clock"></i> 20 hrs
+                            </div>
+                            <div class="course-level">
+                                <i class="fas fa-signal"></i> Beginner
+                            </div>
+                        </div>
+                        
+                        <div class="course-price free">FREE</div>
+                        
+                        <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+                            <i class="fas fa-play"></i> Start Learning
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Course Card 8 -->
+                <div class="course-card">
+                    <div class="course-badge">PREMIUM</div>
+                    <img src="https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Photography Course" class="course-image">
+                    <div class="course-content">
+                        <h4 class="course-title">Digital Photography Masterclass</h4>
+                        <div class="course-instructor">
+                            <img src="https://randomuser.me/api/portraits/women/52.jpg" alt="Instructor">
+                            <span>Emily Wilson</span>
+                        </div>
+                        <p class="course-description">Take stunning photographs by mastering composition, lighting and editing techniques.</p>
+                        
+                        <div class="course-meta">
+                            <div class="course-duration">
+                                <i class="far fa-clock"></i> 25 hrs
+                            </div>
+                            <div class="course-level">
+                                <i class="fas fa-signal"></i> All Levels
+                            </div>
+                        </div>
+                        
+                        <div class="course-price premium">$59.99</div>
+                        
+                        <button class="btn btn-outline" style="width: 100%; margin-top: 1rem;">
+                            <i class="fas fa-shopping-cart"></i> Enroll Now
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Course Card 9 -->
+                <div class="course-card">
+                    <img src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Health Course" class="course-image">
+                    <div class="course-content">
+                        <h4 class="course-title">Nutrition and Wellness</h4>
+                        <div class="course-instructor">
+                            <img src="https://randomuser.me/api/portraits/men/45.jpg" alt="Instructor">
+                            <span>Dr. James Peterson</span>
+                        </div>
+                        <p class="course-description">Learn the science behind nutrition and how to create sustainable healthy habits.</p>
+                        
+                        <div class="course-meta">
+                            <div class="course-duration">
+                                <i class="far fa-clock"></i> 10 hrs
+                            </div>
+                            <div class="course-level">
+                                <i class="fas fa-signal"></i> Beginner
+                            </div>
+                        </div>
+                        
+                        <div class="course-price free">FREE</div>
+                        
+                        <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+                            <i class="fas fa-play"></i> Start Learning
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Simple Mode Toggle -->
+    <button class="simple-mode" id="simpleModeToggle" style="position: fixed; bottom: 20px; right: 20px;">
+        <i class="fas fa-adjust"></i> Simple Mode
+    </button>
+    
+    <script>
+        // Simple mode toggle
+        const simpleModeToggle = document.getElementById('simpleModeToggle');
+        simpleModeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('simple-mode');
+            const icon = simpleModeToggle.querySelector('i');
+            if (document.body.classList.contains('simple-mode')) {
+                icon.classList.remove('fa-adjust');
+                icon.classList.add('fa-expand');
+                simpleModeToggle.title = "Switch to standard mode";
+            } else {
+                icon.classList.remove('fa-expand');
+                icon.classList.add('fa-adjust');
+                simpleModeToggle.title = "Switch to simple mode";
+            }
+        });
+        
+        // Category selection
+        const categories = document.querySelectorAll('.category');
+        categories.forEach(category => {
+            category.addEventListener('click', () => {
+                categories.forEach(c => c.classList.remove('active'));
+                category.classList.add('active');
+                // In a real app, you would filter courses here
+                console.log(`Selected category: ${category.textContent}`);
+            });
+        });
+        
+        // Emotion detection toggle
+        const emotionToggle = document.getElementById('emotionToggle');
+        const emotionCamera = document.getElementById('emotionCamera');
+        const emotionValue = document.getElementById('emotionValue');
+        const emotionSuggestion = document.getElementById('emotionSuggestion');
+        
+        emotionToggle.addEventListener('change', function() {
+            if (this.checked) {
+                // In a real app, you would enable camera and emotion detection here
+                emotionCamera.innerHTML = `
+                    <div class="emotion-camera-placeholder">
+                        <i class="fas fa-smile-beam pulse" style="color: ${getComputedStyle(document.documentElement).getPropertyValue('--accent-color')}"></i>
+                        <p>Camera enabled</p>
+                    </div>
+                `;
+                
+                // Simulate emotion detection
+                setTimeout(() => {
+                    const emotions = ['Happy', 'Focused', 'Confused', 'Bored', 'Engaged'];
+                    const randomEmotion = emotions[Math.floor(Math.random() * emotions.length)];
+                    emotionValue.textContent = randomEmotion;
+                    
+                    // Provide suggestions based on emotion
+                    let suggestion = '';
+                    switch(randomEmotion) {
+                        case 'Happy':
+                            suggestion = 'You seem happy! This is a great time to tackle challenging material.';
+                            break;
+                        case 'Focused':
+                            suggestion = 'You appear focused. Consider working on complex topics now.';
+                            break;
+                        case 'Confused':
+                            suggestion = 'You look confused. Would you like to review previous lessons or try an alternative explanation?';
+                            break;
+                        case 'Bored':
+                            suggestion = 'You seem bored. How about switching to a more interactive activity?';
+                            break;
+                        case 'Engaged':
+                            suggestion = 'You look engaged. This is perfect for learning new concepts!';
+                            break;
+                        default:
+                            suggestion = 'Our system recommends continuing with your current lesson.';
+                    }
+                    
+                    emotionSuggestion.textContent = suggestion;
+                }, 1500);
+            } else {
+                emotionCamera.innerHTML = `
+                    <div class="emotion-camera-placeholder">
+                        <i class="fas fa-camera"></i>
+                                                <p>Camera disabled</p>
+                    </div>
+                `;
+                emotionValue.textContent = 'Not detected';
+                emotionSuggestion.textContent = 'Enable emotion detection to get personalized suggestions based on your mood and engagement level.';
+            }
+        });
+
+        // Course enrollment simulation
+        const enrollButtons = document.querySelectorAll('.btn-outline');
+        enrollButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                const courseCard = this.closest('.course-card');
+                const courseTitle = courseCard.querySelector('.course-title').textContent;
+                const coursePrice = courseCard.querySelector('.course-price').textContent;
+                
+                if (coursePrice === 'FREE') {
+                    this.innerHTML = '<i class="fas fa-play"></i> Start Learning';
+                    this.classList.remove('btn-outline');
+                    this.classList.add('btn-primary');
+                    alert(`You've successfully enrolled in "${courseTitle}"!`);
+                } else {
+                    // Show payment modal for premium courses
+                    alert(`Redirecting to payment for "${courseTitle}" (${coursePrice})...`);
+                    // In a real app, you would show a payment modal here
+                }
+            });
+        });
+
+        // Continue/Start learning buttons
+        const startButtons = document.querySelectorAll('.btn-primary');
+        startButtons.forEach(button => {
+            if (button.textContent.includes('Continue') || button.textContent.includes('Start')) {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const courseCard = this.closest('.course-card');
+                    const courseTitle = courseCard.querySelector('.course-title').textContent;
+                    alert(`Launching "${courseTitle}"...`);
+                    // In a real app, you would redirect to the course player
+                });
+            }
+        });
+
+        // Offline detection
+        window.addEventListener('online', updateOnlineStatus);
+        window.addEventListener('offline', updateOnlineStatus);
+
+        function updateOnlineStatus() {
+            if (!navigator.onLine) {
+                showOfflineAlert();
+            }
+        }
+
+        function showOfflineAlert() {
+            const alertDiv = document.createElement('div');
+            alertDiv.style.position = 'fixed';
+            alertDiv.style.bottom = '20px';
+            alertDiv.style.left = '20px';
+            alertDiv.style.backgroundColor = 'var(--warning-color)';
+            alertDiv.style.color = 'white';
+            alertDiv.style.padding = '10px 20px';
+            alertDiv.style.borderRadius = '5px';
+            alertDiv.style.boxShadow = '0 3px 10px rgba(0,0,0,0.2)';
+            alertDiv.style.zIndex = '1000';
+            alertDiv.innerHTML = '<i class="fas fa-wifi"></i> You are currently offline. Some features may be limited.';
+            
+            document.body.appendChild(alertDiv);
+            
+            setTimeout(() => {
+                alertDiv.style.opacity = '0';
+                setTimeout(() => {
+                    document.body.removeChild(alertDiv);
+                }, 500);
+            }, 5000);
+        }
+
+        // Initialize
+        updateOnlineStatus();
+
+        // Simulate loading progress animation
+        const progressFill = document.querySelector('.progress-fill');
+        let progress = 65;
+        
+        setInterval(() => {
+            progress = Math.min(progress + Math.random() * 2, 100);
+            progressFill.style.width = `${progress}%`;
+            document.querySelector('.progress-percent').textContent = `${Math.floor(progress)}%`;
+        }, 5000);
+
+        // Local storage for offline course access
+        if (typeof(Storage) !== "undefined") {
+            // Save course data for offline access
+            const courses = [
+                {
+                    id: 1,
+                    title: "Introduction to Python",
+                    instructor: "Dr. Sarah Johnson",
+                    description: "Learn the fundamentals of Python programming with hands-on exercises and real-world examples.",
+                    duration: "12 hrs",
+                    level: "Beginner",
+                    price: "FREE",
+                    image: "python_course.jpg"
+                },
+                // Add other courses similarly
+            ];
+            
+            localStorage.setItem('offlineCourses', JSON.stringify(courses));
+            console.log('Courses saved for offline access');
+        }
+
+        // Adaptive learning features
+        function recommendCoursesBasedOnBehavior() {
+            // In a real app, this would analyze user behavior and progress
+            console.log('Adaptive learning: Recommending courses based on user behavior');
+        }
+
+        // Initialize adaptive features
+        recommendCoursesBasedOnBehavior();
+    </script>
+</body>
+</html>
